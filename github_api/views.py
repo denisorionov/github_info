@@ -1,0 +1,36 @@
+import requests
+from django.shortcuts import render
+
+
+def view_search(request):
+    if request.GET.get('search', ''):
+        owner = request.GET.get('search', '')
+        token = "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"
+        url = "https://api.github.com/search/issues"
+        headers = {"Authorization": f"token {token}"}
+        params = {"q": f"author:{owner} type:pr"}
+        pr = requests.get(url, headers=headers, params=params).json()
+        pr_detail = [requests.get(item["pull_request"]["url"], headers=headers).json() for item in pr["items"]]
+        result_search = {}
+        for pr in pr_detail:
+            if pr["base"]["repo"]["name"] not in result_search:
+                result_search[pr["base"]["repo"]["name"]] = {
+                    "url": pr["base"]["repo"]["html_url"],
+                    "star": pr["base"]["repo"]["stargazers_count"],
+                    "pr_unmerged": [],
+                    "pr_merged": []
+                }
+                if pr["merged_at"] is None:
+                    result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append({pr["html_url"]: pr["comments"]})
+                else:
+                    result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
+            else:
+                if pr["merged_at"] is None:
+                    result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append(
+                        {pr["html_url"]: pr["comments"]})
+                else:
+                    result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
+
+        return render(request, template_name='search.html', context={"result_search": result_search})
+
+    return render(request, template_name='search.html')
