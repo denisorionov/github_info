@@ -8,7 +8,7 @@
 <body>
     <main class="container mt-3">
         <section>
-        <h3 class="h3 text-center mx-auto mt-4 py-5"><strong>Веб-сервис<br>который позволяет узнать, в какие проекты конкретный пользователь Гитхаба делал пул-реквесты их их смерджили</strong></h3>
+        <h3 class="h3 text-center mx-auto mt-4 py-5"><strong>Веб-сервис<br>который позволяет узнать, в какие проекты конкретный пользователь Гитхаба делал пул-реквесты и их смерджили</strong></h3>
         <div class="row">
             <div class="col-12 col-md-8 col-lg-6 offset-lg-3 offset-md-2">
             <form class="form-inline mb-3" action="{% url 'search' %}">
@@ -20,6 +20,7 @@
                 </div>
             </form>
     </main>
+    {% load declension %}
     {% if args.message %}
     <center>
         <p>Ничего не найдено</p>
@@ -30,10 +31,10 @@
     <center>
       <h2>Результаты поиска</h2>
     </center>
-    <hr/>
-    <table class="table w-auto small">
+
+    <table class="table table-sm">
       <tr>
-        <th>Название проекта Ссылка на проект на Гитхабе</th>
+        <th scope="col">Название проекта Ссылка на проект на Гитхабе</th>
         <th>Количество звёзд на Гитхабе</th>
         <th>Ссылки на смерженные пул-реквесты от пользователя - количество комментраиев</th>
         <th>Ссылки на несмерженные пул-реквесты от пользователя - количество комментраиев</th>
@@ -48,15 +49,15 @@
           </td>
           <td>
             {% for pr in result.pr_merged %}
-            {% for url, comments in pr.items %}
-            <a href="{{ url }}">{{ url }}</a> - {{ comments }} комм.
+            {% for url, value in pr.items %}
+            <a href="{{ url }}">pull request {{ value.number }}</a> - {{ value.comments|decl }}<br>
             {% endfor %}
             {% endfor %}
           </td>
           <td>
             {% for pr in result.pr_unmerged %}
-            {% for url, comments in pr.items %}
-            <a href="{{ url }}">{{ url }}</a> - {{ comments }} комм.
+            {% for url, value in pr.items %}
+            <a href="{{ url }}">pull request {{ value.number }}</a> - {{ value.comments|decl }}<br>
             {% endfor %}
             {% endfor %}
           </td>

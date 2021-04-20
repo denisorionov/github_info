@@ -22,9 +22,9 @@ def view_search(request):
                     "pr_merged": []
                 }
             if pr["merged_at"] is None:
-                result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append({pr["html_url"]: pr["comments"]})
+                result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append({pr["html_url"]: {"comments": pr["comments"], "number": pr["number"]}})
             else:
-                result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
+                result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: {"comments": pr["comments"], "number": pr["number"]}})
 
         if not result_search:
             args["message"] = True

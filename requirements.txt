@@ -12,3 +12,5 @@ requests==2.25.1
 sqlparse==0.4.1
 urllib3==1.26.4
 wrapt==1.12.1
+
+pymorphy2~=0.9.1
