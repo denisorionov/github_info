@@ -21,18 +21,14 @@ def view_search(request):
                     "pr_unmerged": [],
                     "pr_merged": []
                 }
-                if pr["merged_at"] is None:
-                    result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append({pr["html_url"]: pr["comments"]})
-                else:
-                    result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
+            if pr["merged_at"] is None:
+                result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append({pr["html_url"]: pr["comments"]})
             else:
-                if pr["merged_at"] is None:
-                    result_search[pr["base"]["repo"]["name"]]["pr_unmerged"].append(
-                        {pr["html_url"]: pr["comments"]})
-                else:
-                    result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
+                result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
+
         if not result_search:
             args["message"] = True
+
         return render(request, template_name='search.html', context={"result_search": result_search, "args": args})
 
     return render(request, template_name='search.html')
