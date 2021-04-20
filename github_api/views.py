@@ -10,7 +10,14 @@ def view_search(request):
         url = "https://api.github.com/search/issues"
         headers = {"Authorization": f"token {token}"}
         params = {"q": f"author:{owner} type:pr"}
-        pr = requests.get(url, headers=headers, params=params).json()
+        r = requests.get(url, headers=headers, params=params)
+        try:
+            r.raise_for_status()
+        except Exception:
+            args["user_not_found"] = True
+            return render(request, template_name='search.html', context={"args": args})
+
+        pr = r.json()
         pr_detail = [requests.get(item["pull_request"]["url"], headers=headers).json() for item in pr["items"]]
         result_search = {}
         for pr in pr_detail:

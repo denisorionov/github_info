@@ -26,6 +26,11 @@
         <p>Ничего не найдено</p>
     </center>
     {% endif %}
+    {% if args.user_not_found %}
+    <center>
+        <p>Пользователь не найден</p>
+    </center>
+    {% endif %}
     {% if result_search %}
 <div class="container">
     <center>
