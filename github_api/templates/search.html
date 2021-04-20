@@ -20,18 +20,23 @@
                 </div>
             </form>
     </main>
+    {% if args.message %}
+    <center>
+        <p>Ничего не найдено</p>
+    </center>
+    {% endif %}
     {% if result_search %}
 <div class="container">
     <center>
       <h2>Результаты поиска</h2>
     </center>
     <hr/>
-    <table class="table table-responsive">
+    <table class="table w-auto small">
       <tr>
         <th>Название проекта Ссылка на проект на Гитхабе</th>
         <th>Количество звёзд на Гитхабе</th>
-        <th>Ссылки на смерженные пул-реквесты от пользователя</th>
-        <th>Ссылки на несмерженные пул-реквесты от пользователя</th>
+        <th>Ссылки на смерженные пул-реквесты от пользователя - количество комментраиев</th>
+        <th>Ссылки на несмерженные пул-реквесты от пользователя - количество комментраиев</th>
       </tr>
         {% for repo, result in result_search.items %}
         <tr>

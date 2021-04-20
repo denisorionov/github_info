@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 
 def view_search(request):
+    args = {}
     if request.GET.get('search', ''):
         owner = request.GET.get('search', '')
         token = "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"
@@ -30,7 +31,8 @@ def view_search(request):
                         {pr["html_url"]: pr["comments"]})
                 else:
                     result_search[pr["base"]["repo"]["name"]]["pr_merged"].append({pr["html_url"]: pr["comments"]})
-
-        return render(request, template_name='search.html', context={"result_search": result_search})
+        if not result_search:
+            args["message"] = True
+        return render(request, template_name='search.html', context={"result_search": result_search, "args": args})
 
     return render(request, template_name='search.html')
