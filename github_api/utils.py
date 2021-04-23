@@ -1,6 +1,11 @@
 import requests
 
-token = "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"
+from environs import Env
+
+env = Env()
+env.read_env()
+
+token = env.str("token")
 
 
 def search(token, owner):
@@ -15,7 +20,8 @@ def search(token, owner):
         return None
 
     pull_requests = response.json()
-    pull_request_detail = [requests.get(item["pull_request"]["url"], headers=headers).json() for item in pull_requests["items"]]
+    pull_request_detail = [requests.get(item["pull_request"]["url"], headers=headers).json() for item in
+                           pull_requests["items"]]
     result_search = {}
 
     for pull_request in pull_request_detail:
